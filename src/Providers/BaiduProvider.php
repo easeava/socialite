@@ -1,11 +1,4 @@
 <?php
-# @Author: oni
-# @Date:   2018-12-05T09:53:49+08:00
-# @Last modified by:   oni
-# @Last modified time: 2018-12-05T10:33:58+08:00
-
-
-
 
 /*
  * This file is part of the Easeava package.
