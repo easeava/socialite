@@ -45,6 +45,13 @@ class BaiduProvider extends AbstractProvider implements ProviderInterface
     protected $scopes = ['snsapi_userinfo'];
 
     /**
+     * Indicates if the session state should be utilized.
+     *
+     * @var bool
+     */
+    protected $stateless = true;
+
+    /**
      * Get the authentication URL for the provider.
      *
      * @param string $state
