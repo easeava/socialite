@@ -3,7 +3,8 @@
     "description": "Socialite is an OAuth2 Authentication tool.",
     "require": {
         "php": ">=7.0",
-        "overtrue/socialite": "^2.0"
+        "overtrue/socialite": "^2.0",
+      "ext-json": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.4"
@@ -14,5 +15,10 @@
             "name": "太年轻",
             "email": "tthd@163.com"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "EaseAva\\Socialite\\": "src/"
+        }
+    }
 }
