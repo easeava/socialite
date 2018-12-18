@@ -11,6 +11,7 @@
 
 namespace EaseAva\Socialite\Providers;
 
+use EaseAva\Socialite\Contracts\BiaduComponentInterface;
 use Overtrue\Socialite\User;
 use InvalidArgumentException;
 use Overtrue\Socialite\AccessTokenInterface;
@@ -52,6 +53,22 @@ class BaiduProvider extends AbstractProvider implements ProviderInterface
     protected $stateless = true;
 
     /**
+     * @var \EaseAva\Socialite\Contracts\BiaduComponentInterface
+     */
+    protected $component;
+
+    /**
+     * @param BiaduComponentInterface $component
+     * @return $this
+     */
+    public function component(BiaduComponentInterface $component)
+    {
+        $this->component = $component;
+
+        return $this;
+    }
+
+    /**
      * Get the authentication URL for the provider.
      *
      * @param string $state
@@ -61,6 +78,26 @@ class BaiduProvider extends AbstractProvider implements ProviderInterface
     protected function getAuthUrl($state)
     {
         return $this->buildAuthUrlFromBase($this->baseUrl.'/oauth/'.$this->version.'/authorize', $state);
+    }
+
+    /**
+     * @param null $state
+     * @return array
+     */
+    protected function getCodeFields($state = null)
+    {
+        if ($this->component) {
+            $this->with(['tp_client_id' => $this->component->getClientId()]);
+        }
+
+        return array_merge([
+            'appid' => $this->clientId,
+            'redirect_uri' => $this->redirectUrl,
+            'response_type' => 'code',
+            'scope' => $this->formatScopes($this->scopes, $this->scopeSeparator),
+            'state' => $state ?: md5(time()),
+            'connect_redirect' => 1,
+        ], $this->parameters);
     }
 
     /**
@@ -92,9 +129,11 @@ class BaiduProvider extends AbstractProvider implements ProviderInterface
      */
     protected function getTokenFields($code)
     {
-        return array_merge(parent::getTokenFields($code), [
-            'grant_type' => 'authorization_code'
-        ]);
+        return array_filter(array_merge(parent::getTokenFields($code), [
+            'grant_type' => $this->component ? 'tp_authorization_code' : 'authorization_code',
+            'tp_client_id' => $this->component ? $this->component->getClientId() : null,
+            'tp_access_token' => $this->component ? $this->component->getToken() : null,
+        ]));
     }
 
     /**
@@ -124,6 +163,16 @@ class BaiduProvider extends AbstractProvider implements ProviderInterface
         ]);
 
         return json_decode($response->getBody(), true);
+    }
+
+    public function getAccessToken($code)
+    {
+        $response = $this->getHttpClient()->get($this->getTokenUrl(), [
+            'headers' => ['Accept' => 'application/json'],
+            'query' => $this->getTokenFields($code),
+        ]);
+
+        return $this->parseAccessToken($response->getBody());
     }
 
     /**
