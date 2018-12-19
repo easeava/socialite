@@ -92,7 +92,7 @@ class BaiduProvider extends AbstractProvider implements ProviderInterface
             'response_type' => 'code',
             'scope' => $this->formatScopes($this->scopes, $this->scopeSeparator),
             'state' => $state ?: md5(time()),
-            'pass_no_login' => 1,
+            'pass_no_login' => 0,
         ], $this->parameters);
     }
 
