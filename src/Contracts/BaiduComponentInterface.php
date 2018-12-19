@@ -11,7 +11,7 @@
 
 namespace EaseAva\Socialite\Contracts;
 
-interface BiaduComponentInterface
+interface BaiduComponentInterface
 {
     /**
      * Return the Bear tp component client id.

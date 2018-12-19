@@ -11,7 +11,7 @@
 
 namespace EaseAva\Socialite\Providers;
 
-use EaseAva\Socialite\Contracts\BiaduComponentInterface;
+use EaseAva\Socialite\Contracts\BaiduComponentInterface;
 use Overtrue\Socialite\User;
 use InvalidArgumentException;
 use Overtrue\Socialite\AccessTokenInterface;
@@ -53,15 +53,11 @@ class BaiduProvider extends AbstractProvider implements ProviderInterface
     protected $stateless = true;
 
     /**
-     * @var \EaseAva\Socialite\Contracts\BiaduComponentInterface
+     * @var BaiduComponentInterface
      */
     protected $component;
 
-    /**
-     * @param BiaduComponentInterface $component
-     * @return $this
-     */
-    public function component(BiaduComponentInterface $component)
+    public function component(BaiduComponentInterface $component)
     {
         $this->component = $component;
 
