@@ -87,12 +87,12 @@ class BaiduProvider extends AbstractProvider implements ProviderInterface
         }
 
         return array_merge([
-            'appid' => $this->clientId,
+            'client_id' => $this->clientId,
             'redirect_uri' => $this->redirectUrl,
             'response_type' => 'code',
             'scope' => $this->formatScopes($this->scopes, $this->scopeSeparator),
             'state' => $state ?: md5(time()),
-            'connect_redirect' => 1,
+            'pass_no_login' => 1,
         ], $this->parameters);
     }
 
@@ -135,9 +135,7 @@ class BaiduProvider extends AbstractProvider implements ProviderInterface
     /**
      * Get the raw user for the given access token.
      *
-     * @param \Overtrue\Socialite\AccessToken $token
-     *
-     * @return array
+     * @return array|mixed
      */
     protected function getUserByToken(AccessTokenInterface $token)
     {
